@@ -17,6 +17,7 @@ export default function User() {
       withCredentials: true,
     })
       .then(({ data }) => {
+        console.log("data",data);
         const { iat, ...authData } = data; // remove unimportant iat value
 
         setSession(authData);

@@ -11,8 +11,8 @@ const RightSideBar = ({ currUser, setPromoteLevelModal, promoteLevel, promoteLev
   }
 
   useEffect(() => {
-    console.log(currUser);
-  }, []);
+    console.log("from right",currUser);
+  }, [currUser]);
 
   return (
     <div
@@ -35,11 +35,14 @@ const RightSideBar = ({ currUser, setPromoteLevelModal, promoteLevel, promoteLev
       >
         {
           currUser ? 
-        currUser.name.length === 0 ? <span className="text" style={{ fontSize: "32px" }}>
-          {getEllipsisTxt(currUser.username, 6)}
-        </span> : <span className="text" style={{ fontSize: "32px" }}>
-          {currUser.name}
-        </span> : <div></div> //loading
+        currUser.name.length === 0 ? 
+          <span className="text" style={{ fontSize: "32px" }}>
+              {getEllipsisTxt(currUser.username, 6)}
+          </span> : 
+          <span className="text" style={{ fontSize: "32px" }}>
+            {currUser.name}
+          </span> : 
+        <div></div> //loading
       }
 
         <div

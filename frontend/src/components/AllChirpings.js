@@ -6,6 +6,7 @@ import Moment from "react-moment";
 import WingsYellow from "../assets/logos/WingsYellow.png";
 import Level from "../assets/logos/Level.png";
 import RedCage from "../assets/logos/RedCage.png";
+const { BigNumber } = require("ethers");
 
 const AllChirpings = ({
   chirping,
@@ -56,7 +57,7 @@ const AllChirpings = ({
       setCreatorData(x);
     };
 
-    showChirpingText(chirping.chirpingText);
+    showChirpingText(chirping[2]);
     setWingsGiven();
     setCagesGiven();
     settingCreatorData();
@@ -70,28 +71,35 @@ const AllChirpings = ({
       myProfile: false,
       creatorProfile: true,
     });
-    setCurrCreator(chirping.creator);
+    setCurrCreator(chirping[1]);
   };
 
   const onClickWings = async () => {
     await givingWings();
-    setChirpingIdArray((arr) => [...arr, chirping.chirpingId]);
+    setChirpingIdArray((arr) => [...arr, chirping[0]]);
   };
 
   const onClickCage = async () => {
     await givingCage();
-    setChirpingIdArray2((arr) => [...arr, chirping.chirpingId]);
+    setChirpingIdArray2((arr) => [...arr, chirping[0]]);
   };
+
+  const testing = "checking";
+  console.log("bignumber == >>", typeof testing);
+  const conv = testing.toNumber();
+  console.log("bignumberrrrr == >>", conv);
+  // const value = BigNumber.from(chirping[3]);
+  // console.log("bignumber == >>",value.toNumber());
 
   return (
     <>
       <div
         className="chirpingPost"
         style={{
-          background: chirping.hide ? "#EC9393" : "rgb(241, 235, 99, 50%)",
+          background: chirping[6] ? "#EC9393" : "rgb(241, 235, 99, 50%)",
         }}
       >
-        {chirping.hide ? (
+        {chirping[6] ? (
           <div
             style={{
               position: "absolute",
@@ -108,7 +116,7 @@ const AllChirpings = ({
         )}
         <div
           style={{
-            opacity: chirping.hide ? "0.5" : "1",
+            opacity: chirping[6] ? "0.5" : "1",
             width: "100%",
             height: "100%",
             display: "flex",
@@ -163,25 +171,25 @@ const AllChirpings = ({
               {creatorData ? (
                 creatorData.name === "" ? (
                   <span
-                    className={chirping.hide ? "text" : "textOnHover"}
+                    className={chirping[6] ? "text" : "textOnHover"}
                     style={{
                       margin: "0rem 2rem",
                       fontSize: "24px",
                       letterSpacing: "2px",
                     }}
-                    onClick={() => !chirping.hide && onClickName()}
+                    onClick={() => !chirping[6] && onClickName()}
                   >
-                    {getEllipsisTxt(chirping.creator, 6)}
+                    {getEllipsisTxt(chirping[1], 6)}
                   </span>
                 ) : (
                   <span
-                    className={chirping.hide ? "text" : "textOnHover"}
+                    className={chirping[6] ? "text" : "textOnHover"}
                     style={{
                       margin: "0rem 2rem",
                       fontSize: "24px",
                       letterSpacing: "2px",
                     }}
-                    onClick={() => !chirping.hide && onClickName()}
+                    onClick={() => !chirping[6] && onClickName()}
                   >
                     {creatorData.name}
                   </span>
@@ -195,7 +203,7 @@ const AllChirpings = ({
                     letterSpacing: "2px",
                   }}
                 >
-                  {getEllipsisTxt(chirping.creator, 6)}
+                  {getEllipsisTxt(chirping[1], 6)}
                 </span>
               )}
             </div>
@@ -218,7 +226,7 @@ const AllChirpings = ({
                   className="text"
                   style={{ fontSize: "30px", marginRight: "2rem" }}
                 >
-                  {creatorData.level.toNumber()}
+                  {creatorData[8].toNumber()}
                 </span>
               ) : (
                 <span
@@ -294,11 +302,11 @@ const AllChirpings = ({
               className="text"
               style={{ fontSize: "15px" }}
               onClick={() => {
-                console.log(chirping.timestamp.toNumber());
+                console.log((testing.toNumber()));
               }}
             >
               <Moment
-                date={chirping.timestamp.toNumber() * 1000}
+                date={(testing.toNumber()) * 1000}
                 format="LLLL"
               ></Moment>
             </div>
@@ -322,24 +330,24 @@ const AllChirpings = ({
             >
               <img
                 alt="Cage"
-                className={chirping.hide ? "logo" : "logoOnHover"}
+                className={chirping[6] ? "logo" : "logoOnHover"}
                 src={
                   cagesGivenTrue
                     ? RedCage
-                    : chirpingIdArray2.includes(chirping.chirpingId)
+                    : chirpingIdArray2.includes(chirping[0])
                     ? RedCage
                     : Cage
                 }
                 style={{ width: "2.5rem", cursor: "pointer" }}
                 onClick={() => {
-                  !chirping.hide && onClickCage();
+                  !chirping[6] && onClickCage();
                 }}
               ></img>
               <span
                 className="text"
                 style={{ margin: "0rem 1rem", fontSize: "40px" }}
               >
-                {chirping.cages.toNumber()}
+                {(chirping[5].toNumber())()}
               </span>
             </div>
             <div
@@ -353,22 +361,22 @@ const AllChirpings = ({
             >
               <img
                 alt="Wings"
-                className={chirping.hide ? "logo" : "logoOnHover"}
+                className={chirping[6] ? "logo" : "logoOnHover"}
                 src={
                   wingsGivenTrue
                     ? WingsYellow
-                    : chirpingIdArray.includes(chirping.chirpingId)
+                    : chirpingIdArray.includes(chirping[0])
                     ? WingsYellow
                     : Wings
                 }
                 style={{ width: "5rem", cursor: "pointer" }}
-                onClick={() => !chirping.hide && onClickWings()}
+                onClick={() => !chirping[6] && onClickWings()}
               ></img>
               <span
                 className="text"
                 style={{ margin: "0rem 1rem", fontSize: "40px" }}
               >
-                {chirping.wings.toNumber()}
+                {(chirping[4].toNumber())}
               </span>
             </div>
           </div>
