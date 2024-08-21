@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:4000", "https://test--venerable-griffin-1ab342.netlify.app/", "https://social3-1.onrender.com"],
+    // origin: ["http://localhost:3000", "http://localhost:4000", "https://test--venerable-griffin-1ab342.netlify.app/", "https://social3-1.onrender.com"],
     credentials: true,
   })
 );
