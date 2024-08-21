@@ -91,7 +91,7 @@ app.post("/verify", async (req, res) => {
 });
 
 app.get("/authenticate", async (req, res) => {
-//   console.log("cookies check", req);
+  console.log("cookies check", req);
   const token = req.cookies.jwt;
 //   console.log("tokenbhola", token);
   if (!token) return res.sendStatus(403); // if the user did not send a jwt token, they are unauthorized
