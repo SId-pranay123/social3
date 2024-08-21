@@ -141,7 +141,7 @@ const Homepage = () => {
           userAddress: user.address,
         },
       });
-      setMyChirpings(myChirpings);
+      setMyChirpings(myChirpings.data);
 
       // const options4 = {
       //   contractAddress: config.contractAddress,
@@ -157,7 +157,7 @@ const Homepage = () => {
           userAddress: user.address,
         },
       });
-      setMyCagedChirpings(myCagedChirpings);
+      setMyCagedChirpings(myCagedChirpings.data);
 
       console.log("user data", userData)
       console.log("curr user", currUser)
@@ -272,10 +272,8 @@ const Homepage = () => {
     // };
 
     const result = await axios.post(`${ServerUrl}/cagesGivenCheck`, {
-      params: {
         chirpingId: chirpingId,
         userAddress: currUser.username,
-      },
     });
     return result;
   };

@@ -84,10 +84,10 @@ const AllChirpings = ({
     setChirpingIdArray2((arr) => [...arr, chirping[0]]);
   };
 
-  const testing = "checking";
-  console.log("bignumber == >>", typeof testing);
-  const conv = testing.toNumber();
-  console.log("bignumberrrrr == >>", conv);
+  // const testing = "checking";
+  // console.log("bignumber == >>", typeof testing);
+  // const conv = testing.toNumber();
+  // console.log("bignumberrrrr == >>", conv);
   // const value = BigNumber.from(chirping[3]);
   // console.log("bignumber == >>",value.toNumber());
 
@@ -226,7 +226,7 @@ const AllChirpings = ({
                   className="text"
                   style={{ fontSize: "30px", marginRight: "2rem" }}
                 >
-                  {creatorData[8].toNumber()}
+                  {()=>Number(creatorData[8])}
                 </span>
               ) : (
                 <span
@@ -302,11 +302,11 @@ const AllChirpings = ({
               className="text"
               style={{ fontSize: "15px" }}
               onClick={() => {
-                console.log((testing.toNumber()));
+                console.log(()=>Number(chirping[3]));
               }}
             >
               <Moment
-                date={(testing.toNumber()) * 1000}
+                date={()=>(Number(chirping)) * 1000}
                 format="LLLL"
               ></Moment>
             </div>
@@ -347,7 +347,7 @@ const AllChirpings = ({
                 className="text"
                 style={{ margin: "0rem 1rem", fontSize: "40px" }}
               >
-                {(chirping[5].toNumber())()}
+                {()=>Number(chirping[5])()}
               </span>
             </div>
             <div
@@ -376,7 +376,7 @@ const AllChirpings = ({
                 className="text"
                 style={{ margin: "0rem 1rem", fontSize: "40px" }}
               >
-                {(chirping[4].toNumber())}
+                {()=>Number(chirping[4])}
               </span>
             </div>
           </div>
