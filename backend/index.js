@@ -134,7 +134,7 @@ app.post("/addChirping", async (req, res) => {
       address: address,
       functionName: "addChirping",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _numOfCharacters: numOfCharacters,
         _chirpingText: chirpingText,
@@ -179,7 +179,7 @@ app.get("/getAllChirpings", async (req, res) => {
       address: address,
       functionName: "getAllChirpings",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
     };
     const chirpings = await Moralis.EvmApi.utils.runContractFunction(options);
     res.json(chirpings);
@@ -195,7 +195,7 @@ app.get("/getMyChirpings", async (req, res) => {
       address: address,
       functionName: "getMyChirpings",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         user: userAddress,
       },
@@ -214,7 +214,7 @@ app.get("/getCagedChirpings", async (req, res) => {
       address: address,
       functionName: "getCagedChirpings",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         user: userAddress,
       },
@@ -233,7 +233,7 @@ app.post("/givingWings", async (req, res) => {
       address: address,
       functionName: "givingWings",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _chirpingId: chirpingId,
       },
@@ -252,7 +252,7 @@ app.post("/givingCage", async (req, res) => {
       address: address,
       functionName: "givingCage",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _chirpingId: chirpingId,
       },
@@ -271,7 +271,7 @@ app.get("/showUsers", async (req, res) => {
       address: address,
       functionName: "showUsers",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
     };
     const users = await Moralis.EvmApi.utils.runContractFunction(options);
     res.json(users);
@@ -287,7 +287,7 @@ app.get("/showCurrUser", async (req, res) => {
       address: address,
       functionName: "showCurrUser",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         user: userAddress,
       },
@@ -305,7 +305,7 @@ app.post("/promoteLevel", async (req, res) => {
       address: address,
       functionName: "promoteLevel",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
     };
     const transaction = await Moralis.EvmApi.utils.runContractFunction(options);
     res.json(transaction);
@@ -321,7 +321,7 @@ app.post("/wingsGivenCheck", async (req, res) => {
       address: address,
       functionName: "wingsGivenCheck",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _chirpingId: chirpingId,
         _user: userAddress,
@@ -341,7 +341,7 @@ app.post("/cagesGivenCheck", async (req, res) => {
       address: address,
       functionName: "cagesGivenCheck",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _chirpingId: chirpingId,
         _user: userAddress,
@@ -361,7 +361,7 @@ app.post("/addName", async (req, res) => {
       address: address,
       functionName: "addName",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _name: userName,
       },
@@ -380,7 +380,7 @@ app.post("/changeDisplayPicture", async (req, res) => {
       address: address,
       functionName: "changeDisplayPicture",
       abi: ChirpingContractABI,
-      chain: EvmChain.BSC_TESTNET,
+      chain: EvmChain.SEPOLIA,
       params: {
         _imageURL: imageURL,
       },
@@ -396,11 +396,11 @@ app.get("/balances", async (req, res) => {
   try {
     const [nativeBalance, tokenBalances] = await Promise.all([
       Moralis.EvmApi.balance.getNativeBalance({
-        chain: EvmChain.BSC_TESTNET,
+        chain: EvmChain.SEPOLIA,
         address,
       }),
       Moralis.EvmApi.token.getWalletTokenBalances({
-        chain: EvmChain.BSC_TESTNET,
+        chain: EvmChain.SEPOLIA,
         address,
       }),
     ]);
