@@ -73,7 +73,7 @@ const Homepage = () => {
   //   enableWeb3();
   // }, []);
 
-  const ServerUrl = "https://social3-1.onrender.com";
+  const ServerUrl = "https://social3-2.onrender.com";
 
 
   useEffect(() => {
