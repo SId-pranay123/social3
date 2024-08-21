@@ -12,7 +12,7 @@ export default function SignIn() {
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
-  const ServerUrl = "http://localhost:4000";
+  const ServerUrl = "https://social3-1.onrender.com";
 
   const handleAuth = async () => {
     //disconnects the web3 provider if it's already active

@@ -15,7 +15,7 @@ function useAuth() {
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
-  const ServerUrl = "http://localhost:4000";
+  const ServerUrl = "https://social3-1.onrender.com";
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleAuth = async () => {

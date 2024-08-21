@@ -9,7 +9,7 @@ export default function User() {
 
   const [session, setSession] = useState({});
 
-  const ServerUrl = "http://localhost:4000";
+  const ServerUrl = "https://social3-1.onrender.com";
 
 
   useEffect(() => {
