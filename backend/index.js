@@ -30,7 +30,7 @@ const config = {
 };
 
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
-const address = "0x0ae6352e1C411aE52B64e9F702244eC9bF6e44Ac";
+const address = "0xa0791eBf8d2bBe2C8c5391f648c4F607178062A1";
 const provider = new ethers.JsonRpcProvider(
   "https://data-seed-prebsc-1-s1.binance.org:8545/"
 );
