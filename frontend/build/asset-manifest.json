@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2d056c1f.css",
+    "main.js": "/static/js/main.ad6f455f.js",
+    "static/media/ChirpingText.png": "/static/media/ChirpingText.69bab8712eced54de682.png",
+    "static/media/Close.png": "/static/media/Close.db7fff50d15ab0e20332.png",
+    "static/media/LogoAnimation.gif": "/static/media/LogoAnimation.fa0ebaea0be9934ecdb5.gif",
+    "static/media/Spinner.gif": "/static/media/Spinner.1c17178e09df9f1615b9.gif",
+    "static/media/index.cjs": "/static/media/index.61e57bb6b4fd6fcd0938.cjs",
+    "static/media/RedCage.png": "/static/media/RedCage.6c14439b6db08dc509e6.png",
+    "static/media/poweredByPolygon.png": "/static/media/poweredByPolygon.6fa445d516111fb570dd.png",
+    "static/media/WingsYellow.png": "/static/media/WingsYellow.0646a9e16b753400056d.png",
+    "static/media/CageYellow.png": "/static/media/CageYellow.5de0a3e07977939cbbc8.png",
+    "static/media/ChirpingLogo.png": "/static/media/ChirpingLogo.90bab613f263c981e9f6.png",
+    "static/media/Wings.png": "/static/media/Wings.319b0520aa4cca0d52c7.png",
+    "index.html": "/index.html",
+    "main.2d056c1f.css.map": "/static/css/main.2d056c1f.css.map",
+    "main.ad6f455f.js.map": "/static/js/main.ad6f455f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2d056c1f.css",
+    "static/js/main.ad6f455f.js"
+  ]
+}
