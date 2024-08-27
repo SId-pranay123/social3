@@ -12,6 +12,9 @@ import CreatorProfile from "./CreatorProfile";
 import axios from "axios";
 import { useEthereum } from "../context/EthereumContext";
 
+require('dotenv').config();
+
+
 const Homepage = () => {
   const {isAuthenticated, user, authenticate, logout, contract} = useEthereum();
   const displayPicture =
@@ -55,6 +58,7 @@ const Homepage = () => {
 
   useEffect(() => {
     const getData = async () => {
+        console.log("env check = ", process.env.PINATA_API_KEY);
         const currentUser = await contract.showCurrUser(user);
   
         console.log(currentUser);
@@ -260,8 +264,8 @@ const Homepage = () => {
         url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
         data: Data,
         headers: {
-          pinata_api_key: '4a86a8be0709d53c0eba',
-          pinata_secret_api_key: 'b602a8ba8ce3a572fb3cb83573d93af1066f3fccee4d1647bde0e6299a9723ed',
+          pinata_api_key: process.env.PINATA_API_KEY ,
+          pinata_secret_api_key: process.env.PINATA_API_SECRET,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -285,8 +289,8 @@ const Homepage = () => {
         url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
         data: formData,
         headers: {
-          pinata_api_key: '4a86a8be0709d53c0eba',
-          pinata_secret_api_key: 'b602a8ba8ce3a572fb3cb83573d93af1066f3fccee4d1647bde0e6299a9723ed',
+          pinata_api_key: process.env.PINATA_API_KEY,
+          pinata_secret_api_key: process.env.PINATA_API_SECRET,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -327,7 +331,7 @@ const Homepage = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}` // Ensure your API token is securely handled
+                Authorization: `Bearer ${process.env.PINATA_JWT_TOKEN}` // Ensure your API token is securely handled
             },
             body: data
         });

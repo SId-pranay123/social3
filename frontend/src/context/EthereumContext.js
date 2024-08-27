@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { ethers } from 'ethers';
 import config from '../config/config';
 import abi from '../contract/ChirpingABI.json';

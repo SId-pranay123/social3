@@ -1,26 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Homepage from "./components/Hompage";
 import LandingPage from "./components/LandingPage";
 import Signin from "./components/Signin";
 import User from "./components/User";
-import ChirpingApp from "./components/ChirpingApp";
-// import { createConfig, configureChains, WagmiConfig } from "wagmi";
-// import { publicProvider } from "wagmi/providers/public";
-// import { bscTestnet } from "wagmi/chains";
 
 function App() {
-
-  // const { publicClient, webSocketPublicClient } = configureChains(
-  //   [bscTestnet],
-  //   [publicProvider()]
-  // );
-
-  // const config = createConfig({
-  //   autoConnect: true,
-  //   publicClient,
-  //   webSocketPublicClient,
-  // });
 
   return (
     <div>
