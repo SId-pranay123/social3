@@ -1,39 +1,28 @@
 import React, { useState, useEffect } from "react";
-// import Moralis from "moralis";
-// import { useMoralis } from "react-moralis";
-import useAuth from "../hooks/useAuth";
-import { getEllipsisTxt } from "../helpers/formatters";
-import contractABI from "../contract/ChirpingABI.json";
 import LeftSideBar from "./LeftSideBar";
 import RightSideBar from "./RightSideBar";
 import AllChirpings from "./AllChirpings";
-import config from "../config/config";
 import ChirpingText from "../assets/images/ChirpingText.png";
 import ChirpingLogo from "../assets/logos/ChirpingLogo.png";
 import Close from "../assets/images/Close.png";
 import ReactModal from "react-modal";
 import MyProfile from "./MyProfile";
 import { Link } from "react-router-dom";
-import LogoAnimation from "../assets/images/LogoAnimation.gif";
-import Spinner from "../assets/images/Spinner.gif";
 import CreatorProfile from "./CreatorProfile";
 import axios from "axios";
+import { useEthereum } from "../context/EthereumContext";
 
 const Homepage = () => {
-
-  const { authenticate, isAuthenticated, user, logout } = useAuth();
+  const {isAuthenticated, user, authenticate, logout, contract} = useEthereum();
   const displayPicture =
     "https://ipfs.moralis.io:2053/ipfs/QmeRcZfbJJD4To5hxsTiDyuUDYVTppg4RYnnMozSaJDMR3";
-
   const [formData, setFormData] = useState({
     desp: "",
     imageFile: undefined,
   });
-  
   const [addPictureData, setAddPictureData] = useState({
     imageFile: undefined,
   });
-
   const [navStatus, setNavStatus] = useState({
     home: true,
     myChirpings: false,
@@ -64,151 +53,79 @@ const Homepage = () => {
   });
   const [currCreator, setCurrCreator] = useState();
 
-
-  // useEffect(() => {
-  //   const enableWeb3 = async () => {
-  //     // await Moralis.enableWeb3();
-  //     setRandom(true);
-  //   };
-  //   enableWeb3();
-  // }, []);
-
-  const ServerUrl = "https://social3-2.onrender.com";
-
-
   useEffect(() => {
-    console.log("use effect is called");
     const getData = async () => {
+        const currentUser = await contract.showCurrUser(user);
+  
+        console.log(currentUser);
 
-      console.log("get data is called");
+        const CurrUser = {
+          uId : Number(currentUser[0]),
+          username : currentUser[1].toString(),
+          totalChirpings : Number(currentUser[2]),
+          totalWings : Number(currentUser[3]),
+          totalChirpTokens : Number(currentUser[4]),
+          level : Number(currentUser[5]),
+          totalCages : Number(currentUser[6]),
+          prevTimestamp : Number(currentUser[7]),
+          name : currentUser[8].toString(),
+          displayPicture : currentUser[9].toString(),
+        }
+  
+        setCurrUser(currentUser);
+  
+        /**
+         * struct User {
+          uint uId;
+          address username;
+          uint256 totalChirpings;
+          uint256 totalWings;
+          uint256 totalChirpTokens;
+          uint256 level;
+          uint256 totalCages;
+          uint256 prevTimestamp;
+          string name;
+          string displayPicture;
+      }
+        */
 
-      console.log("getData user ----=== ",user.address);
-
-      // const options = {
-      //   contractAddress: config.contractAddress,
-      //   abi: contractABI,
-      //   functionName: "showCurrUser",
-      //   params: {
-      //     user: user.get("ethAddress"),
-      //   },
-      // };
-
-      const currentUser = await axios.get(`${ServerUrl}/showCurrUser`, {
-        params: {
-          userAddress: user.address,
-        },
-      });
-      console.log("this is current user --  ",currentUser.data);
-
-      setCurrUser({
-        username: currentUser.data[1],
-        totalChirpings: currentUser.data[2],
-        totalWings: currentUser.data[3],
-        totalCages: currentUser.data[4],
-        level: currentUser.data[5],
-      });
+      
       setUserData({
         ...userData,
-        username: currentUser.data[1].toString(),
-        totalChirpings: 0,
-        totalWings:  0,
-        totalCages:  0,
-        level: 1,
+        username: CurrUser.username,
+        totalChirpings: CurrUser.totalChirpings,
+        totalWings: CurrUser.totalWings,
+        totalCages: CurrUser.totalCages,
+        level: CurrUser.level,
       });
-
-      // const options2 = {
-      //   contractAddress: config.contractAddress,
-      //   abi: contractABI,
-      //   functionName: "getAllChirpings",
-      // };
-      console.log("getting all chirpings")
-      const allChirpings = await axios.get(`${ServerUrl}/getAllChirpings`);
-      console.log("this is all chirpings --  ",allChirpings.data);
-      setAllChirpings(allChirpings.data);
-      console.log("this is all chirpings --  ",allChirpings.data);
-
-      // const options3 = {
-      //   contractAddress: config.contractAddress,
-      //   abi: contractABI,
-      //   functionName: "getMyChirpings",
-      //   params: {
-      //     user: user.get("ethAddress"),
-      //   },
-      // };
-
-      const myChirpings = await axios.get(`${ServerUrl}/getMyChirpings`, {
-        params: {
-          userAddress: user.address,
-        },
-      });
-      setMyChirpings(myChirpings.data);
-
-      // const options4 = {
-      //   contractAddress: config.contractAddress,
-      //   abi: contractABI,
-      //   functionName: "getCagedChirpings",
-      //   params: {
-      //     user: user.get("ethAddress"),
-      //   },
-      // };
-
-      const myCagedChirpings = await axios.get(`${ServerUrl}/getCagedChirpings`, {
-        params: {
-          userAddress: user.address,
-        },
-      });
-      setMyCagedChirpings(myCagedChirpings.data);
-
-      console.log("user data", userData)
-      console.log("curr user", currUser)
-
+  
+        
+      const AllChirpings = await contract.getAllChirpings();
+      setAllChirpings(AllChirpings);
+  
+    
+      const MyChirps = await contract.getMyChirpings(user);
+      setMyChirpings(MyChirps);
+  
+      const MyCagedChirps = await contract.getCagedChirpings(user);
+      setMyCagedChirpings(MyCagedChirps);
+    
     };
 
-    if (isAuthenticated && random) {
-      console.log("going to call get data")
+    if (isAuthenticated ) {
       getData();
-      console.log(user.address);
+      console.log(user);
     }
-
-  }, [user, isAuthenticated, random]);
-
-
-
+  }, [user, isAuthenticated, random, contract]);
 
   const getCreatorData = async (_creator) => {
-    // const options = {
-    //   contractAddress: config.contractAddress,
-    //   abi: contractABI,
-    //   functionName: "showCurrUser",
-    //   params: {
-    //     user: _creator,
-    //   },
-    // };
-
-    const x = await axios.get(`${ServerUrl}/showCurrUser`, {
-      params: {
-        userAddress: _creator,
-      },
-    });
+    const x = await contract.showCurrUser(_creator);
     return x;
   };
 
-
-
   const givingWings = async (chirpingId) => {
     try {
-      // const options = {
-      //   contractAddress: config.contractAddress,
-      //   abi: contractABI,
-      //   functionName: "givingWings",
-      //   params: {
-      //     _chirpingId: chirpingId,
-      //   },
-      // };
-
-      const transaction = await axios.post(`${ServerUrl}/givingWings`, {
-        chirpingId: chirpingId,
-      });
+      const transaction = await contract.givingWings(chirpingId);
       setLoading(true);
       await transaction.wait();
       setLoading(false);
@@ -218,79 +135,27 @@ const Homepage = () => {
     }
   };
 
-
   const wingsGiven = async (chirpingId) => {
-    // const readOptions = {
-    //   contractAddress: config.contractAddress,
-    //   functionName: "wingsGivenCheck",
-    //   abi: contractABI,
-    //   params: {
-    //     _chirpingId: chirpingId,
-    //     _user: currUser.username,
-    //   },
-    // };
-
-    const result = await axios.post(`${ServerUrl}/wingsGivenCheck`, {
-      params: {
-        chirpingId: chirpingId,
-        userAddress: currUser.username,
-      },
-    });
+    const result = await contract.wingsGivenCheck(chirpingId, currUser.username);
     return result;
   };
 
-
   const givingCage = async (uId) => {
     setLoading(true);
-    // const options = {
-    //   contractAddress: config.contractAddress,
-    //   abi: contractABI,
-    //   functionName: "givingCage",
-    //   params: {
-    //     _chirpingId: uId,
-    //   },
-    // };
-
-    const transaction = await axios.post(`${ServerUrl}/givingCage`, {
-      chirpingId: uId,
-    });
+    const transaction = await contract.givingCage(uId);
     await transaction.wait();
     setLoading(false);
     window.location.reload();
   };
 
-
   const cagesGiven = async (chirpingId) => {
-    // const readOptions = {
-    //   contractAddress: config.contractAddress,
-    //   functionName: "cagesGivenCheck",
-    //   abi: contractABI,
-    //   params: {
-    //     _chirpingId: chirpingId,
-    //     _user: currUser.username,
-    //   },
-    // };
-
-    const result = await axios.post(`${ServerUrl}/cagesGivenCheck`, {
-        chirpingId: chirpingId,
-        userAddress: currUser.username,
-    });
+    const result = await contract.cagesGivenCheck(chirpingId, currUser.username);
     return result;
   };
 
-
   const promoteLevel = async (username) => {
     setLoading(true);
-    // const options = {
-    //   contractAddress: config.contractAddress,
-    //   abi: contractABI,
-    //   functionName: "promoteLevel",
-    //   params: {
-    //     user: username,
-    //   },
-    // };
-
-    const transaction = await axios.post(`${ServerUrl}/promoteLevel`);
+    const transaction = await contract.promoteLevel(username);
     await transaction.wait();
     setpromoteLevelStatus(true);
     setLoading(false);
@@ -309,7 +174,7 @@ const Homepage = () => {
       currUser.totalChirpings >= 20 &&
       currUser.totalChirpings < 30 &&
       currUser.totalWings >= 40 &&
-      user.level < 2
+      currUser.level < 2
     ) {
       return true;
     } else if (
@@ -340,18 +205,7 @@ const Homepage = () => {
 
   const addingName = async () => {
     setLoading(true);
-    // const options = {
-    //   contractAddress: config.contractAddress,
-    //   abi: contractABI,
-    //   functionName: "addName",
-    //   params: {
-    //     _name: addNameData.name,
-    //   },
-    // };
-
-    const transaction = await axios.post(`${ServerUrl}/addName`, {
-      username: addNameData.name,
-    });
+    const transaction = await contract.addName(addNameData.name);
     await transaction.wait();
     setLoading(false);
     window.location.reload();
@@ -359,19 +213,7 @@ const Homepage = () => {
 
   const addUser = async (username) => {
     try {
-      // const options = {
-      //   contractAddress: config.contractAddress,
-      //   abi: contractABI,
-      //   functionName: "addUser",
-      //   params: {
-      //     user: username,
-      //     displayPicture: displayPicture,
-      //   },
-      // };
-      const transaction = await axios.post(`${ServerUrl}/addUser`, {
-        username: username,
-        displayPicture: displayPicture,
-      });
+      const transaction = await contract.addUser(username, displayPicture);
       setLoading(true);
       await transaction.wait();
       setLoading(false);
@@ -383,16 +225,16 @@ const Homepage = () => {
     }
   };
 
-
   const login = async () => {
-    if (!isAuthenticated) {
+    try {
       setLoading(true);
       await authenticate();
-      setRandom(true);
-    } else {
-      console.log("Already logged In");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+
   };
 
   const logOut = async () => {
@@ -407,95 +249,144 @@ const Homepage = () => {
   //   await file.saveIPFS();
   //   return file.ipfs();
   // };
+  const uploadImage = async () => {
+    const data = formData.imageFile[0];
+    const Data = new FormData();
+    Data.append('file', data); // Append the file from the input
+  
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        data: Data,
+        headers: {
+          pinata_api_key: '4a86a8be0709d53c0eba',
+          pinata_secret_api_key: 'b602a8ba8ce3a572fb3cb83573d93af1066f3fccee4d1647bde0e6299a9723ed',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const ipfsHash = response.data.IpfsHash;
+      return `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
+    } catch (error) {
+      console.error('Failed to upload image to Pinata:', error);
+      throw new Error('Failed to upload image');
+    }
+  };
+  
 
-  // const uploadDisplayPicture = async () => {
-  //   const data = addPictureData.imageFile[0];
-  //   const file = new Moralis.File(data.name, data);
-  //   await file.saveIPFS();
-  //   return file.ipfs();
-  // };
+  const uploadDisplayPicture = async () => {
+    const data = addPictureData.imageFile[0];
+    const formData = new FormData();
+    formData.append('file', data); // Append the file from the input
+  
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        data: formData,
+        headers: {
+          pinata_api_key: '4a86a8be0709d53c0eba',
+          pinata_secret_api_key: 'b602a8ba8ce3a572fb3cb83573d93af1066f3fccee4d1647bde0e6299a9723ed',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const ipfsHash = response.data.IpfsHash;
+      return `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
+    } catch (error) {
+      console.error('Failed to upload display picture to Pinata:', error);
+      throw new Error('Failed to upload display picture');
+    }
+  };
+  
 
-  // const settingImageURL = async () => {
-  //   let imageUrl = "";
-  //   if (currUser.level >= 5) {
-  //     if (formData.imageFile === undefined) {
-  //       return imageUrl;
-  //     } else {
-  //       const imageURL = await uploadImage();
-  //       return imageURL;
-  //     }
-  //   } else {
-  //     return imageUrl;
-  //   }
-  // };
-
-  // const settingDisplayPictureURL = async () => {
-  //   if (currUser.level >= 5) {
-  //     const imageURL = await uploadDisplayPicture();
-  //     return imageURL;
-  //   }
-  // };
-
-  const addChirping = async () => {
-    // setLoading(true);
-
-    // const imageUrl = await settingImageURL();
-
-    // const strLen = formData.desp.length;
-
-    // const metadata = {
-    //   chirpingText: formData.desp,
-    //   imageURL: imageUrl,
-    // };
-    // const file = new Moralis.File("file.json", {
-    //   base64: btoa(JSON.stringify(metadata)),
-    // });
-
-    // await file.saveIPFS();
-    // const dataUrl = file.ipfs();
-    // console.log(dataUrl);
-
-    // const options = {
-    //   contractAddress: config.contractAddress,
-    //   abi: contractABI,
-    //   functionName: "addChirping",
-    //   params: {
-    //     _numOfCharacters: strLen,
-    //     _chirpingText: dataUrl,
-    //     _chirpingImage: dataUrl,
-    //   },
-    // };
-
-    // const transaction = await Moralis.executeFunction(options);
-
-    // await transaction.wait();
-    // setLoading(false);
-    // window.location.reload();
-
-    // console.log("executed");
+  const settingImageURL = async () => {
+    let imageUrl = "";
+    if (currUser.level >= 5) {
+      if (formData.imageFile === undefined) {
+        return imageUrl;
+      } else {
+        const imageURL = await uploadImage();
+        return imageURL;
+      }
+    } else {
+      return imageUrl;
+    }
   };
 
-  // const addPicture = async () => {
-  //   setLoading(true);
-  //   const imageURL = await settingDisplayPictureURL();
+  const settingDisplayPictureURL = async () => {
+    if (currUser.level >= 5) {
+      const imageURL = await uploadDisplayPicture();
+      return imageURL;
+    }
+  };
 
-  //   const options = {
-  //     contractAddress: config.contractAddress,
-  //     abi: contractABI,
-  //     functionName: "changeDisplayPicture",
-  //     params: {
-  //       _imageURL: imageURL,
-  //     },
-  //   };
+  const pinJSONToIPFS = async (jsonObject) => {
+    const data = JSON.stringify(jsonObject);
+    try {
+        const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}` // Ensure your API token is securely handled
+            },
+            body: data
+        });
+        const resData = await response.json();
+        if (response.ok) {
+            return `https://gateway.pinata.cloud/ipfs/${resData.IpfsHash}`;
+        } else {
+            throw new Error('Failed to pin data to IPFS: ' + resData.error);
+        }
+    } catch (error) {
+        console.error('Error uploading JSON to Pinata:', error);
+        throw error; // Rethrowing error to be handled by the caller
+    }
+};
 
-  //   const transaction = await Moralis.executeFunction(options);
-  //   await transaction.wait();
-  //   setLoading(false);
-  //   window.location.reload();
-  // };
+  const addChirping = async () => {
+    setLoading(true);
+
+    try {
+        // Assuming settingImageURL is another function that returns a direct URL to an image
+        const imageUrl = await settingImageURL();
+        const metadata = {
+            chirpingText: formData.desp,
+            imageURL: imageUrl,
+        };
+
+        // Upload JSON metadata to IPFS using Pinata
+        const jsonUrl = await pinJSONToIPFS(metadata);
+
+        // Assuming you have a contract ready to handle the transaction
+        const strLen = formData.desp.length;
+        const transaction = await contract.addChirping(strLen, jsonUrl, jsonUrl);
+        await transaction.wait();
+
+        console.log("Metadata IPFS URL: ", jsonUrl);
+        console.log("Transaction executed");
+
+        // Resetting UI and reloading might not be necessary or best practice, consider updating UI based on state
+        setLoading(false);
+        window.location.reload();
+    } catch (error) {
+        console.error("Error adding chirping:", error);
+        setLoading(false);
+    }
+};
+
+  const addPicture = async () => {
+    setLoading(true);
+    const imageURL = await settingDisplayPictureURL();
+
+    const transaction = await contract.changeDisplayPicture(imageURL);
+    await transaction.wait();
+    setLoading(false);
+    window.location.reload();
+  };
 
   return (
     <div className="mainBg">
+
       <div
         style={{
           display: "flex",
@@ -525,7 +416,6 @@ const Homepage = () => {
             }}
           ></img>
         </ReactModal>
-
         <ReactModal
           className="addPictureModal"
           style={{
@@ -658,7 +548,6 @@ const Homepage = () => {
             ></input>
           </form>
         </ReactModal>
-
         <ReactModal
           className="chirpingModal"
           style={{
@@ -687,15 +576,11 @@ const Homepage = () => {
             Instructions
           </div>
         </ReactModal>
-
-
-        {!user ?
-         (
+        {!user ? (
           <button className="connectWallet" onClick={login}>
             <span style={{ fontSize: "22px" }}>Connect Wallet</span>
           </button>
-        ) : 
-        (
+        ) : (
           <div>
             <button className="connectWallet2" onClick={logOut}>
               <span style={{ fontSize: "14px" }}>Logout</span>
@@ -721,8 +606,6 @@ const Homepage = () => {
             </div>
           </div>
         )}
-
-
         <div
           style={{
             height: "15vh",
@@ -765,18 +648,6 @@ const Homepage = () => {
           }}
         >
           <div className="leftSideBar">
-            {/* <button
-              onClick={() => {
-                // console.log(userData);
-                // console.log(allChirpings);
-                // console.log(myChirpings);
-                // console.log(myCagedChirpings);
-                // console.log(promoteLevelStatus);
-                console.log(currUser);
-              }}
-            >
-              CLick here
-            </button> */}
             <LeftSideBar
               currUser={currUser}
               setChirpingModal={setChirpingModal}
@@ -795,35 +666,33 @@ const Homepage = () => {
                       alignItems: "center",
                     }}
                   >
-                    { allChirpings
-                      .map((chirping) => {
-                        console.log("chirping ka chakkar ==>>", chirping);
-                        return(
+                    {allChirpings
+                      .map((chirping) => (
                         <AllChirpings
-                          key={chirping[0]}
+                          key={chirping.chirpingId}
                           chirping={chirping}
                           givingCage={() => {
-                            givingCage(chirping[0]);
+                            givingCage(chirping.chirpingId);
                           }}
                           givingWings={async () => {
-                            await givingWings(chirping[0]);
+                            await givingWings(chirping.chirpingId);
                           }}
                           wingsGivenCheck={async () => {
-                            const x = await wingsGiven(chirping[0]);
+                            const x = await wingsGiven(chirping.chirpingId);
                             return x;
                           }}
                           cagesGivenCheck={async () => {
-                            const x = await cagesGiven(chirping[0]);
+                            const x = await cagesGiven(chirping.chirpingId);
                             return x;
                           }}
                           getCreatorData={async () => {
-                            const x = await getCreatorData(chirping[1]);
+                            const x = await getCreatorData(chirping.creator);
                             return x;
                           }}
                           setNavStatus={setNavStatus}
                           setCurrCreator={setCurrCreator}
                         />
-                      )})
+                      ))
                       .reverse()}
                   </div>
                 ) : navStatus.myChirpings ? (
@@ -902,9 +771,7 @@ const Homepage = () => {
                 ) : navStatus.myProfile ? (
                   <MyProfile
                     currUser={currUser}
-                    addPicture={() => {
-                      
-                    }}
+                    addPicture={addPicture}
                     setAddPictureData={setAddPictureData}
                     addPictureData={addPictureData}
                     addNameData={addNameData}
@@ -922,8 +789,7 @@ const Homepage = () => {
                   <div>Something Else</div>
                 )}
               </div>
-            ) : 
-            (
+            ) : (
               <div
                 className="text"
                 style={{
@@ -939,10 +805,8 @@ const Homepage = () => {
               </div>
             )}
           </div>
-
-
           <div style={{ height: "100%", width: "25%" }}>
-            {/* <RightSideBar
+            <RightSideBar
               currUser={currUser}
               setPromoteLevelModal={setPromoteLevelModal}
               promoteLevel={promoteLevel}
@@ -950,13 +814,15 @@ const Homepage = () => {
                 const x = promoteLevelCheck();
                 return x;
               }}
-            /> */}
+            />
           </div>
         </div>
       </div>
     </div>
+
     // <div>
-    //   Welcome to home page
+    //   <button onClick={login}>Connect Wallet</button>
+    //   <button onClick={logOut}>Logout</button>
     // </div>
   );
 };

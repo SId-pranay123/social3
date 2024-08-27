@@ -24,7 +24,7 @@ const EnterDapp = () => {
         alignItems: "center",
       }}
     >
-      <img
+      {/* <img
         alt="Powered By BNB"
         src={PoweredByPolygon}
         style={{
@@ -33,7 +33,7 @@ const EnterDapp = () => {
           left: "2rem",
           top: "2rem",
         }}
-      />
+      /> */}
       <div
         style={{
           display: "flex",

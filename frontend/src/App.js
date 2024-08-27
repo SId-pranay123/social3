@@ -4,6 +4,7 @@ import Homepage from "./components/Hompage";
 import LandingPage from "./components/LandingPage";
 import Signin from "./components/Signin";
 import User from "./components/User";
+import ChirpingApp from "./components/ChirpingApp";
 // import { createConfig, configureChains, WagmiConfig } from "wagmi";
 // import { publicProvider } from "wagmi/providers/public";
 // import { bscTestnet } from "wagmi/chains";

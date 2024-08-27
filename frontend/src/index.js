@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./home.css";
+import { EthereumProvider } from "./context/EthereumContext";
 // import { MoralisProvider } from "react-moralis";
 
 import { http, createConfig, WagmiProvider } from "wagmi";
@@ -37,7 +38,9 @@ ReactDOM.render(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         {/* <MoralisProvider serverUrl={serverUrl} appId={appId}> */}
-          <App />
+          <EthereumProvider >
+            <App />
+          </EthereumProvider>
         {/* </MoralisProvider> */}
       </QueryClientProvider>
     </WagmiProvider>

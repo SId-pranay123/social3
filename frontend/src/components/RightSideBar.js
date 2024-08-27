@@ -99,16 +99,16 @@ const RightSideBar = ({ currUser, setPromoteLevelModal, promoteLevel, promoteLev
               }}
             >
               <span className="rightSideBarText">
-                {currUser.level.toNumber()}
+                {currUser.level}
               </span>
               <span className="rightSideBarText">
-                {currUser.totalChirpings.toNumber()}
+                {currUser.totalChirpings}
               </span>
               <span className="rightSideBarText">
-                {currUser.totalWings.toNumber()}
+                {currUser.totalWings}
               </span>
               <span className="rightSideBarText">
-                {currUser.totalCages.toNumber()}
+                {currUser.totalCages}
               </span>
             </div>
           ) : (

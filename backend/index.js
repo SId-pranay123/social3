@@ -129,7 +129,7 @@ app.post("/webhook", async (req, res) => {
 
 app.post("/addChirping", async (req, res) => {
   try {
-    const { numOfCharacters, chirpingText, chirpingImage, userAddress } =
+    const { numOfCharacters, chirpingText, chirpingImage } =
       req.body;
     const options = {
       address: address,
