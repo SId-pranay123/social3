@@ -178,7 +178,7 @@ const MyProfile = ({
             style={{ width: "4rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currUser.level.toNumber()}
+            {currUser.level}
           </span>
         </div>
         <div
@@ -196,7 +196,7 @@ const MyProfile = ({
             style={{ width: "4rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currUser.totalChirpings.toNumber()}
+            {currUser.totalChirpings}
           </span>
         </div>
         <div
@@ -214,7 +214,7 @@ const MyProfile = ({
             style={{ width: "7rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currUser.totalWings.toNumber()}
+            {currUser.totalWings}
           </span>
         </div>
         <div
@@ -232,7 +232,7 @@ const MyProfile = ({
             style={{ width: "4rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currUser.totalCages.toNumber()}
+            {currUser.totalCages}
           </span>
         </div>
       </div>

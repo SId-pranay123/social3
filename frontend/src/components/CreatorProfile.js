@@ -54,7 +54,7 @@ const CreatorProfile = ({ currCreator }) => {
             style={{ width: "4rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currentCreator.level.toNumber()}
+            {currentCreator.level}
           </span>
         </div>
         <div
@@ -72,7 +72,7 @@ const CreatorProfile = ({ currCreator }) => {
             style={{ width: "4rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currentCreator.totalChirpings.toNumber()}
+            {currentCreator.totalChirpings}
           </span>
         </div>
         <div
@@ -90,7 +90,7 @@ const CreatorProfile = ({ currCreator }) => {
             style={{ width: "7rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currentCreator.totalWings.toNumber()}
+            {currentCreator.totalWings}
           </span>
         </div>
         <div
@@ -108,7 +108,7 @@ const CreatorProfile = ({ currCreator }) => {
             style={{ width: "4rem", marginRight: "1rem" }}
           ></img>
           <span className="rightSideBarText" style={{ fontSize: "4rem" }}>
-            {currentCreator.totalCages.toNumber()}
+            {currentCreator.totalCages}
           </span>
         </div>
       </div>

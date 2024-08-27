@@ -12,7 +12,6 @@ import CreatorProfile from "./CreatorProfile";
 import axios from "axios";
 import { useEthereum } from "../context/EthereumContext";
 
-require('dotenv').config();
 
 
 const Homepage = () => {
@@ -264,8 +263,8 @@ const Homepage = () => {
         url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
         data: Data,
         headers: {
-          pinata_api_key: process.env.PINATA_API_KEY ,
-          pinata_secret_api_key: process.env.PINATA_API_SECRET,
+          pinata_api_key: process.env.PINATA_API_KEY || 'b6ad9e90fdd515b0565e',
+          pinata_secret_api_key: process.env.PINATA_API_SECRET || '7af98d693be43df62b4473dc1f85c2ec5ccf53292ab16af8037af0ae6f21d73b',
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -289,8 +288,8 @@ const Homepage = () => {
         url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
         data: formData,
         headers: {
-          pinata_api_key: process.env.PINATA_API_KEY,
-          pinata_secret_api_key: process.env.PINATA_API_SECRET,
+          pinata_api_key: process.env.PINATA_API_KEY || 'b6ad9e90fdd515b0565e',
+          pinata_secret_api_key: process.env.PINATA_API_SECRET || '7af98d693be43df62b4473dc1f85c2ec5ccf53292ab16af8037af0ae6f21d73b',
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -331,7 +330,7 @@ const Homepage = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${process.env.PINATA_JWT_TOKEN}` // Ensure your API token is securely handled
+                Authorization: `Bearer ${process.env.PINATA_JWT_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxNDgwOGYzMi1hMGUyLTQ1ZDMtYjg3Mi02YjgzYjMzNzNmMTEiLCJlbWFpbCI6InNpZGRoYXJ0aHByYW5heTBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiRlJBMSJ9LHsiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiTllDMSJ9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6ImI2YWQ5ZTkwZmRkNTE1YjA1NjVlIiwic2NvcGVkS2V5U2VjcmV0IjoiN2FmOThkNjkzYmU0M2RmNjJiNDQ3M2RjMWY4NWMyZWM1Y2NmNTMyOTJhYjE2YWY4MDM3YWYwYWU2ZjIxZDczYiIsImV4cCI6MTc1NjMwNTM1M30.D-p1hxz38GLQi0toFkzuW6kcWItlGxBHZ90nP3IuVOY'}` // Ensure your API token is securely handled
             },
             body: data
         });
