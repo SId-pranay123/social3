@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { getEllipsisTxt } from "../helpers/formatters";
 import Chirping from "../assets/logos/ChirpingLogo.png";
 import Wings from "../assets/logos/WingsYellow.png";
@@ -9,10 +9,6 @@ const RightSideBar = ({ currUser, setPromoteLevelModal, promoteLevel, promoteLev
   function togglePromoteLevel() {
     setPromoteLevelModal(true);
   }
-
-  useEffect(() => {
-    console.log("from right",currUser);
-  }, [currUser]);
 
   return (
     <div

@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import config from '../config/config';
 import abi from '../contract/ChirpingABI.json';
-const EthereumContext = createContext();
+export const EthereumContext = createContext();
 
 export const useEthereum = () => useContext(EthereumContext);
 
@@ -10,11 +10,13 @@ export const EthereumProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
     const [contract, setContract] = useState(null);
+    const [loader, setLoader] = useState(false);
     // console.log("config", config.contractAddress)
 
     const contractAddress = config.contractAddress;
     // Function to connect wallet and authenticate user
     const authenticate = async () => {
+        setLoader(true);
         try {
 
             const provider = new ethers.BrowserProvider(window.ethereum);
@@ -27,7 +29,7 @@ export const EthereumProvider = ({ children }) => {
             const accounts = await provider.send("eth_requestAccounts", []);
 
             // console.log("currUser = ", await contractWithSigner.showCurrUser(accounts[0]));
-            console.log("accounts - ", accounts, accounts.length > 0)
+            // console.log("accounts - ", accounts, accounts.length > 0)
             if (accounts.length > 0) {
                 setContract(contractWithSigner);
                 setUser(accounts[0]);
@@ -41,6 +43,8 @@ export const EthereumProvider = ({ children }) => {
             setIsAuthenticated(false);
             setUser(null);
             console.error("Failed to authenticate:", error);
+        } finally {
+            setLoader(false);
         }
     };
 
@@ -51,22 +55,20 @@ export const EthereumProvider = ({ children }) => {
     };
 
     // Automatically attempt to connect when component mounts
-    // useEffect(() => {
-    //     console.log("isAuthenticated", isAuthenticated);
-    //     console.log("user", user);
-    // }, [user, isAuthenticated]);
-
-    // Provide state and functions to the context
-    const value = {
-        isAuthenticated,
-        user,
-        authenticate,
-        logout,
-        contract
-    };
+    useEffect(() => {
+        console.log("isAuthenticated", isAuthenticated);
+        console.log("user", user);
+    }, [user, isAuthenticated]);
 
     return (
-        <EthereumContext.Provider value={value}>
+        <EthereumContext.Provider value={{
+            isAuthenticated,
+            user,
+            authenticate,
+            logout,
+            contract,
+            loader
+        }}>
             {children}
         </EthereumContext.Provider>
     );

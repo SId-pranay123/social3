@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Home from "../assets/logos/Home.png";
 import ChirpingLogoNone from "../assets/logos/ChirpingLogoNone.png";
 import Cage from "../assets/logos/Cage.png";

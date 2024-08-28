@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import LeftSideBar from "./LeftSideBar";
 import RightSideBar from "./RightSideBar";
 import AllChirpings from "./AllChirpings";
@@ -10,14 +10,20 @@ import MyProfile from "./MyProfile";
 import { Link } from "react-router-dom";
 import CreatorProfile from "./CreatorProfile";
 import axios from "axios";
-import { useEthereum } from "../context/EthereumContext";
+import config from '../config/config';
+import abi from '../contract/ChirpingABI.json';
+import { ethers } from 'ethers';
+
+// import {  EthereumContext } from "../context/EthereumContext";
 
 
 
 const Homepage = () => {
-  const {isAuthenticated, user, authenticate, logout, contract} = useEthereum();
-  const displayPicture =
-    "https://ipfs.moralis.io:2053/ipfs/QmeRcZfbJJD4To5hxsTiDyuUDYVTppg4RYnnMozSaJDMR3";
+  // const {isAuthenticated, user, authenticate, logout, contract } = useContext(EthereumContext);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [contract, setContract] = useState(null);
+
   const [formData, setFormData] = useState({
     desp: "",
     imageFile: undefined,
@@ -33,7 +39,6 @@ const Homepage = () => {
     creatorProfile: false,
   });
 
-  const [random, setRandom] = useState(false);
   const [promoteLevelModal, setPromoteLevelModal] = useState(false);
   const [chirpingModal, setChirpingModal] = useState(false);
   const [addNameData, setAddNameData] = useState({
@@ -55,13 +60,11 @@ const Homepage = () => {
   });
   const [currCreator, setCurrCreator] = useState();
 
+
   useEffect(() => {
     const getData = async () => {
-        console.log("env check = ", process.env.PINATA_API_KEY);
         const currentUser = await contract.showCurrUser(user);
   
-        console.log(currentUser);
-
         const CurrUser = {
           uId : Number(currentUser[0]),
           username : currentUser[1].toString(),
@@ -74,9 +77,10 @@ const Homepage = () => {
           name : currentUser[8].toString(),
           displayPicture : currentUser[9].toString(),
         }
+
   
-        setCurrUser(currentUser);
-  
+        setCurrUser(CurrUser);
+        
         /**
          * struct User {
           uint uId;
@@ -117,9 +121,8 @@ const Homepage = () => {
 
     if (isAuthenticated ) {
       getData();
-      console.log(user);
     }
-  }, [user, isAuthenticated, random, contract]);
+  }, [user, isAuthenticated, contract]);
 
   const getCreatorData = async (_creator) => {
     const x = await contract.showCurrUser(_creator);
@@ -216,7 +219,7 @@ const Homepage = () => {
 
   const addUser = async (username) => {
     try {
-      const transaction = await contract.addUser(username, displayPicture);
+      const transaction = await contract.addUser(username, "");
       setLoading(true);
       await transaction.wait();
       setLoading(false);
@@ -228,12 +231,50 @@ const Homepage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("user" , user, isAuthenticated);
+    const add = async () => {
+      await addUser(user);
+    }
+
+    if (isAuthenticated) {
+      add();
+    }
+  }, [user, isAuthenticated])
+
   const login = async () => {
     try {
       setLoading(true);
-      await authenticate();
-      const transaction = await contract.addUser(currUser.username, "" );
-      await transaction.wait();
+      
+        try {
+
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+            const contract = new ethers.Contract(config.contractAddress, abi, signer);
+
+            const contractWithSigner = contract.connect(await signer);
+
+            // Request account access if needed 
+            const accounts = await provider.send("eth_requestAccounts", []);
+
+            if (accounts.length > 0) {
+                setContract(contractWithSigner);
+                setUser(accounts[0]);
+                console.log("Account:", user, accounts[0]);
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+                setUser(null);
+                console.error("No account found. Make sure MetaMask is connected.");
+            }
+        } catch (error) {
+            setIsAuthenticated(false);
+            setUser(null);
+            console.error("Failed to authenticate:", error);
+        }
+
+      console.log("Logged in as ", user);
+      await addUser(currUser.username);
     } catch (error) {
       console.log(error);
     } finally {
@@ -243,7 +284,8 @@ const Homepage = () => {
   };
 
   const logOut = async () => {
-    await logout();
+    setIsAuthenticated(false);
+    setUser(null);
     window.location.reload();
     console.log("logged out");
   };
@@ -367,8 +409,8 @@ const Homepage = () => {
         const transaction = await contract.addChirping(strLen, jsonUrl, jsonUrl);
         await transaction.wait();
 
-        console.log("Metadata IPFS URL: ", jsonUrl);
-        console.log("Transaction executed");
+        // console.log("Metadata IPFS URL: ", jsonUrl);
+        // console.log("Transaction executed");
 
         // Resetting UI and reloading might not be necessary or best practice, consider updating UI based on state
         setLoading(false);
@@ -388,6 +430,11 @@ const Homepage = () => {
     setLoading(false);
     window.location.reload();
   };
+
+
+  // if (loader) {
+  //   return <div>Loading...</div>;  // Show a loading indicator while authentication is in progress
+  // }
 
   return (
     <div className="mainBg">
@@ -602,7 +649,7 @@ const Homepage = () => {
             >
               <img
                 alt="Profile"
-                src={currUser ? currUser.displayPicture : displayPicture}
+                src={currUser ? currUser.displayPicture : ""}
                 style={{
                   width: "8rem",
                   height: "8rem",
@@ -811,6 +858,7 @@ const Homepage = () => {
             )}
           </div>
           <div style={{ height: "100%", width: "25%" }}>
+            {/* {console.log(currUser, "curr user from right")} */}
             <RightSideBar
               currUser={currUser}
               setPromoteLevelModal={setPromoteLevelModal}
