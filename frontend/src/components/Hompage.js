@@ -23,6 +23,7 @@ const Homepage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [contract, setContract] = useState(null);
+  const [loggedIn ,setLoggedIn] = useState(false);
 
   const [formData, setFormData] = useState({
     desp: "",
@@ -135,7 +136,7 @@ const Homepage = () => {
       setLoading(true);
       await transaction.wait();
       setLoading(false);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       alert(err.data.message);
     }
@@ -235,10 +236,13 @@ const Homepage = () => {
     console.log("user" , user, isAuthenticated);
     const add = async () => {
       await addUser(user);
+      setLoggedIn(true);
     }
 
     if (isAuthenticated) {
-      add();
+      if(!loggedIn){
+        add();
+      }
     }
   }, [user, isAuthenticated])
 

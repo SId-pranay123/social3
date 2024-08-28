@@ -25,9 +25,7 @@ const AllChirpings = ({
   const [wingsGivenTrue, setWingsGivenTrue] = useState(false);
   const [cagesGivenTrue, setCagesGivenTrue] = useState(false);
   const [creatorData, setCreatorData] = useState();
-  const displayPicture =
-    "https://ipfs.moralis.io:2053/ipfs/QmeRcZfbJJD4To5hxsTiDyuUDYVTppg4RYnnMozSaJDMR3";
-
+ 
   useEffect(() => {
     const showChirpingText = async (_chirpingText) => {
       try {
@@ -160,7 +158,7 @@ const AllChirpings = ({
                 <img
                   alt="Profile"
                   src={
-                    creatorData ? creatorData.displayPicture : displayPicture
+                    creatorData ? creatorData.displayPicture : ""
                   }
                   style={{
                     width: "4rem",
