@@ -232,6 +232,8 @@ const Homepage = () => {
     try {
       setLoading(true);
       await authenticate();
+      const transaction = await contract.addUser(currUser.username, "" );
+      await transaction.wait();
     } catch (error) {
       console.log(error);
     } finally {
